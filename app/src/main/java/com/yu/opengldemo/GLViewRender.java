@@ -13,6 +13,7 @@ public class GLViewRender implements GLSurfaceView.Renderer {
 
     protected Context mContext;
     Triangle triangle;
+    Cube cube;
 
     public GLViewRender(Context context) {
         this.mContext = context;
@@ -22,16 +23,19 @@ public class GLViewRender implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         //设置背景颜色
         GLES20.glClearColor(0, 0, 0, 0);
-        triangle = new Triangle(mContext);
+//        triangle = new Triangle(mContext);
+        cube = new Cube(mContext);
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-        triangle.onSurfaceChanged(width, height);
+//        triangle.onSurfaceChanged(width, height);
+        cube.onSurfaceChanged(width, height);
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        triangle.onDrawFrame();
+//        triangle.onDrawFrame();
+        cube.onDrawFrame();
     }
 }

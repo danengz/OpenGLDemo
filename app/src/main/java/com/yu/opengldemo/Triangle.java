@@ -3,13 +3,10 @@ package com.yu.opengldemo;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-
-import javax.microedition.khronos.opengles.GL10;
 
 public class Triangle {
 
@@ -30,9 +27,7 @@ public class Triangle {
 
 
     //3d图形用到了 4x4的矩阵
-    private float[] mViewMatrix=new float[16];
     private float[] mProjectMatrix=new float[16];
-    private float[] mMVPMatrix=new float[16];
 
     /**
      * 构造函数
@@ -56,12 +51,12 @@ public class Triangle {
         //                "}";
         //        GLES20.glShaderSource(shader, str);
         // 上面注释的和下面这句一样
-        GLES20.glShaderSource(shader, Utils.readRawTextFile(context, R.raw.base_vertex));
+        GLES20.glShaderSource(shader, Utils.readRawTextFile(context, R.raw.triangle_vert));
         GLES20.glCompileShader(shader);
 
         //创建片元着色器  并且在GPU进行编译
         int fragmentShader=GLES20.glCreateShader(GLES20.GL_FRAGMENT_SHADER);
-        GLES20.glShaderSource(fragmentShader, Utils.readRawTextFile(context, R.raw.base_frag));
+        GLES20.glShaderSource(fragmentShader, Utils.readRawTextFile(context, R.raw.triangle_frag));
         GLES20.glCompileShader(fragmentShader);
 
         //将片元着色器和顶点着色器放到统一程序中
