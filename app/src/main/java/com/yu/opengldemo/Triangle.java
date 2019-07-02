@@ -73,18 +73,29 @@ public class Triangle {
 
 
     public void onSurfaceChanged(int width, int height) {
-        float ratio = (float)height/ width;
 
-        // 设置投影面位置，near和far距离太小的话可能会导致部分被剪掉
-        Matrix.frustumM(mProjectMatrix, 0, -1, 1, -ratio, ratio, 10f, 100f);
+        float aspectRatio = width > height ?
+                (float) width / (float) height :
+                (float) height / (float) width;
 
-        // 设置相机位置，Z轴的距离要在投影面的near和far之间， eyeZ/near是缩放倍数，但是不能相等
-        Matrix.setLookAtM(mViewMatrix, 0, 0, 0, 10.001f,//摄像机的坐标
-                0f, 0f, 0f,//目标物的中心坐标
-                0f, 1f, 0f);//相机方向
+        if (width > height) {
+            //横屏。需要设置的就是左右。
+            Matrix.orthoM(mProjectMatrix, 0, -aspectRatio, aspectRatio, -1, 1f, -1f, 1f);
+        } else {
+            //竖屏。需要设置的就是上下
+            Matrix.orthoM(mProjectMatrix, 0, -1, 1f, -aspectRatio, aspectRatio, -1f, 1f);
+        }
 
-        //计算变换矩阵，这是OpenGL顶点着色器的程序里需要的格式
-        Matrix.multiplyMM(mMVPMatrix,0,mProjectMatrix,0,mViewMatrix,0);
+//        // 设置投影面位置，near和far距离太小的话可能会导致部分被剪掉
+//        Matrix.frustumM(mProjectMatrix, 0, -1, 1, -ratio, ratio, 10f, 100f);
+//
+//        // 设置相机位置，Z轴的距离要在投影面的near和far之间， eyeZ/near是缩放倍数，但是不能相等
+//        Matrix.setLookAtM(mViewMatrix, 0, 0, 0, 10.1f,//摄像机的坐标
+//                0f, 0f, 0f,//目标物的中心坐标
+//                0f, 1f, 0f);//相机方向
+//
+//        //计算变换矩阵，这是OpenGL顶点着色器的程序里需要的格式
+//        Matrix.multiplyMM(mMVPMatrix,0,mProjectMatrix,0,mViewMatrix,0);
     }
 
 
@@ -95,7 +106,7 @@ public class Triangle {
         GLES20.glUseProgram(mProgram);
 
         int mMatrixHandler = GLES20.glGetUniformLocation(mProgram, "vMatrix");
-        GLES20.glUniformMatrix4fv(mMatrixHandler,1,false, mMVPMatrix,0);
+        GLES20.glUniformMatrix4fv(mMatrixHandler,1,false, mProjectMatrix,0);
 
         // 获取顶点着色器中的vPosition变量
         int mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
