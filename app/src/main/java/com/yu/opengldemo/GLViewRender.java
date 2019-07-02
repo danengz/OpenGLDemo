@@ -3,6 +3,7 @@ package com.yu.opengldemo;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 import android.view.View;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -26,7 +27,7 @@ public class GLViewRender implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-
+        triangle.onSurfaceChanged(width, height);
     }
 
     @Override
