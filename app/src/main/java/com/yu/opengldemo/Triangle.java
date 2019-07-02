@@ -29,6 +29,7 @@ public class Triangle {
 
 
 
+    //3d图形用到了 4x4的矩阵
     private float[] mViewMatrix=new float[16];
     private float[] mProjectMatrix=new float[16];
     private float[] mMVPMatrix=new float[16];
@@ -74,15 +75,14 @@ public class Triangle {
 
     public void onSurfaceChanged(int width, int height) {
 
+        //根据短的方向进行缩放
         float aspectRatio = width > height ?
                 (float) width / (float) height :
                 (float) height / (float) width;
 
         if (width > height) {
-            //横屏。需要设置的就是左右。
             Matrix.orthoM(mProjectMatrix, 0, -aspectRatio, aspectRatio, -1, 1f, -1f, 1f);
         } else {
-            //竖屏。需要设置的就是上下
             Matrix.orthoM(mProjectMatrix, 0, -1, 1f, -aspectRatio, aspectRatio, -1f, 1f);
         }
 
@@ -128,7 +128,8 @@ public class Triangle {
         // 片元着色器设置颜色
         GLES20.glUniform4fv(mColorHandle, 1, color, 0);
 
-        // 绘制三角形
+        // 绘制
+        // 这里的GL_TRIANGLES跟纹理渲染颜色的顺序有关系。如果绘制花里胡哨的，需要用到
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 3);
         // 禁止变量读写，对应上面的glEnableVertexAttribArray
         // 注意这句要放在最后，不然有时候不显示
